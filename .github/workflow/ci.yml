@@ -6,8 +6,15 @@ on:
     branches: [master]
 
 jobs:
-  code:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v
+      - name: Docker Setup
+        uses: Docker/login-action@v5
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      
