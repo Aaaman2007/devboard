@@ -1,0 +1,13 @@
+# Goal: Build the image for DevBoard Frontend and Push to Docker Hub
+name: CI
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v
