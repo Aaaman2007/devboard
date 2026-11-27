@@ -1,4 +1,4 @@
-# Build and push DevBoard frontend to Docker Hub
+# Lint the repository, then build and push the DevBoard frontend image.
 
 name: CI
 
@@ -7,10 +7,35 @@ on:
     branches: [main]
   workflow_dispatch:
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+permissions:
+  contents: read
 
+jobs:
+  lint:
+    name: Lint and format check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+  build-and-push:
+    name: Build and push Docker image
+    needs: lint
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
